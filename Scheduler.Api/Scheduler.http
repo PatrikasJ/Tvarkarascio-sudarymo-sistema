@@ -1,0 +1,8 @@
+POST http://localhost:5269/schedules/generate
+Content-Type: application/json
+X-Client-Id: 1
+
+{
+  "periodStart": "2026-11-16T00:00:00",
+  "periodEnd": "2026-11-17T00:00:00"
+}
