@@ -1,4 +1,4 @@
-# Build output
+# build output
 bin/
 obj/
 
@@ -9,13 +9,18 @@ obj/
 # Visual Studio
 .vs/
 
-# SQLite development database
+# sql development
 scheduler.db
 scheduler.db-shm
 scheduler.db-wal
 
-# Test results
+# tests
 TestResults/
 
-# Logs
+# logs
 *.log
+
+# env
+.env
+.env.*
+!.env.example

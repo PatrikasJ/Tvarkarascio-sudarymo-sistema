@@ -1,8 +1,53 @@
-POST http://localhost:5269/schedules/generate
+POST http://localhost:8080/auth/login
 Content-Type: application/json
-X-Client-Id: 1
 
 {
-  "periodStart": "2026-11-16T00:00:00",
-  "periodEnd": "2026-11-17T00:00:00"
+  "email": "admin1@example.com",
+  "password": "password123"
 }
+###
+GET http://localhost:8080/auth/me
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJhZG1pbjFAZXhhbXBsZS5jb20iLCJqdGkiOiI0NTMxM2M3MS0zMjlkLTQzYWQtYmEzNC0wOGQxNzY5NjVhNmMiLCJleHAiOjE3OTUzNTkyMjAsImlzcyI6IlNjaGVkdWxlci5BcGkiLCJhdWQiOiJTY2hlZHVsZXIuQ2xpZW50In0.KV5Kvg4OSfDZkaf93lQiS-NbgVBtpOWojfAhh7-SkrM
+###
+GET http://localhost:5269/schedules
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJhZG1pbjFAZXhhbXBsZS5jb20iLCJqdGkiOiIzZWNlMjM0MS0yZjM0LTQwYmUtYTRjNC1lMTM2NTRiMzc3NTEiLCJleHAiOjE3OTUyNzM5OTIsImlzcyI6IlNjaGVkdWxlci5BcGkiLCJhdWQiOiJTY2hlZHVsZXIuQ2xpZW50In0.3MA4-W0Aot9xMOUeA2ERWZ0aW_k48oMJLHQPUGZu6IE
+X-Client-Id: 1
+###
+POST http://localhost:5269/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin1@example.com",
+  "password": "password123"
+}
+###
+GET http://localhost:5269/auth/me
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJhZG1pbjFAZXhhbXBsZS5jb20iLCJqdGkiOiI2MDE3MzQ0Ni1lOTdkLTQxMzEtODk4ZS1kOTg4OTNkYTVjOTQiLCJleHAiOjE3OTUzNTM3NzYsImlzcyI6IlNjaGVkdWxlci5BcGkiLCJhdWQiOiJTY2hlZHVsZXIuQ2xpZW50In0.ixrCwSmEK1lPy8QkED7zgdnstPcmI_elKTivNcXA9Xk
+###
+POST http://localhost:5269/schedules/generate
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJhZG1pbjFAZXhhbXBsZS5jb20iLCJqdGkiOiJhZGNmODIwOC0yYzMxLTQ3OWYtYjZiZi1lOTdhZjg0YjBiNTYiLCJleHAiOjE3OTUyNzQ4NjksImlzcyI6IlNjaGVkdWxlci5BcGkiLCJhdWQiOiJTY2hlZHVsZXIuQ2xpZW50In0.BF8xY3ZM_v8bXbKkK_7RmAnuX1ZemtCcXozBJQo0jl8
+X-Client-Id: 2
+Content-Type: application/json
+
+{
+  "periodStart": "2026-11-22T00:00:00",
+  "periodEnd": "2026-11-29T00:00:00"
+}
+###
+GET http://localhost:8080/settings/scheduling
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJhZG1pbjFAZXhhbXBsZS5jb20iLCJqdGkiOiI0NzhmMDZmNi1hOWVjLTQ3ZGMtODcyMy0zNjE4MzdmMTc1NTAiLCJleHAiOjE3OTUzNzExNTIsImlzcyI6IlNjaGVkdWxlci5BcGkiLCJhdWQiOiJTY2hlZHVsZXIuQ2xpZW50In0.eqP6asMabypuQIuUTaNtf9kMty6YiMAWn_bIdjCM4r4
+X-Client-Id: 1
+###
+PUT http://localhost:8080/settings/scheduling
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJhZG1pbjFAZXhhbXBsZS5jb20iLCJqdGkiOiI0NzhmMDZmNi1hOWVjLTQ3ZGMtODcyMy0zNjE4MzdmMTc1NTAiLCJleHAiOjE3OTUzNzExNTIsImlzcyI6IlNjaGVkdWxlci5BcGkiLCJhdWQiOiJTY2hlZHVsZXIuQ2xpZW50In0.eqP6asMabypuQIuUTaNtf9kMty6YiMAWn_bIdjCM4r4
+X-Client-Id: 1
+Content-Type: application/json
+
+{
+  "maxShiftsPerEmployee": 5
+}
+###
+GET http://localhost:5269/settings/scheduling
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzIiwiZW1haWwiOiJhZG1pbjJAZXhhbXBsZS5jb20iLCJqdGkiOiIwYzU2OWU4Zi05NDYxLTQ3YjMtYmQ5ZS01YTQ2Y2IxMDAzMzAiLCJleHAiOjE3OTUzNTM5NDYsImlzcyI6IlNjaGVkdWxlci5BcGkiLCJhdWQiOiJTY2hlZHVsZXIuQ2xpZW50In0.TNMbpInY8qVbgmrSGShSij0jGqr1WxekDAsFFreiaYQ
+X-Client-Id: 2
+

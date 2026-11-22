@@ -13,6 +13,9 @@ public sealed class AppDbContext : DbContext
     public DbSet<Shift> Shifts => Set<Shift>();
     public DbSet<WorkSchedule> WorkSchedules => Set<WorkSchedule>();
     public DbSet<ShiftAssignment> ShiftAssignments => Set<ShiftAssignment>();
+    public DbSet<User> Users => Set<User>();
+    public DbSet<OrgMembership> OrgMemberships => Set<OrgMembership>();
+    public DbSet<SchedulingSettings> SchedulingSettings => Set<SchedulingSettings>();
     
     public AppDbContext(DbContextOptions<AppDbContext> options, ClientContext client) : base(options)
     {
@@ -44,8 +47,23 @@ public sealed class AppDbContext : DbContext
             .HasForeignKey(a=>a.EmployeeId)
             .OnDelete(DeleteBehavior.Restrict);
         
+        modelBuilder.Entity<User>()
+            .HasIndex(u => u.Email)
+            .IsUnique();
+        modelBuilder.Entity<User>()
+            .HasMany(u=>u.Memberships)
+            .WithOne()
+            .HasForeignKey(m => m.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+        modelBuilder.Entity<OrgMembership>()
+            .HasIndex(m => new { m.UserId, m.ClientId })
+            .IsUnique();
+        
         modelBuilder.Entity<ShiftAssignment>()
             .HasIndex(a => new { a.WorkScheduleId, a.ShiftId })
+            .IsUnique();
+        modelBuilder.Entity<SchedulingSettings>()
+            .HasIndex(s => s.ClientId)
             .IsUnique();
         
         modelBuilder.Entity<Employee>()
@@ -58,6 +76,7 @@ public sealed class AppDbContext : DbContext
             .HasQueryFilter(e => e.ClientId == CurrentClientId);
         modelBuilder.Entity<ShiftAssignment>()
             .HasQueryFilter(e => e.ClientId == CurrentClientId);
-        
+        modelBuilder.Entity<SchedulingSettings>()
+            .HasQueryFilter(s => s.ClientId == CurrentClientId);
     }
 }

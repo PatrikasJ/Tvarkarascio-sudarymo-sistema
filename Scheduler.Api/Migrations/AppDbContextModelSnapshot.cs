@@ -69,6 +69,52 @@ namespace Scheduler.Api.Migrations
                     b.ToTable("Employees");
                 });
 
+            modelBuilder.Entity("Scheduler.Api.Domain.OrgMembership", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ClientId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId", "ClientId")
+                        .IsUnique();
+
+                    b.ToTable("OrgMemberships");
+                });
+
+            modelBuilder.Entity("Scheduler.Api.Domain.SchedulingSettings", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ClientId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("MaxShiftsPerEmployee")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientId")
+                        .IsUnique();
+
+                    b.ToTable("SchedulingSettings");
+                });
+
             modelBuilder.Entity("Scheduler.Api.Domain.Shift", b =>
                 {
                     b.Property<int>("Id")
@@ -125,6 +171,28 @@ namespace Scheduler.Api.Migrations
                     b.ToTable("ShiftAssignments");
                 });
 
+            modelBuilder.Entity("Scheduler.Api.Domain.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.ToTable("Users");
+                });
+
             modelBuilder.Entity("Scheduler.Api.Domain.WorkSchedule", b =>
                 {
                     b.Property<int>("Id")
@@ -158,6 +226,15 @@ namespace Scheduler.Api.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Scheduler.Api.Domain.OrgMembership", b =>
+                {
+                    b.HasOne("Scheduler.Api.Domain.User", null)
+                        .WithMany("Memberships")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Scheduler.Api.Domain.ShiftAssignment", b =>
                 {
                     b.HasOne("Scheduler.Api.Domain.Employee", null)
@@ -182,6 +259,11 @@ namespace Scheduler.Api.Migrations
             modelBuilder.Entity("Scheduler.Api.Domain.Employee", b =>
                 {
                     b.Navigation("Availability");
+                });
+
+            modelBuilder.Entity("Scheduler.Api.Domain.User", b =>
+                {
+                    b.Navigation("Memberships");
                 });
 
             modelBuilder.Entity("Scheduler.Api.Domain.WorkSchedule", b =>
