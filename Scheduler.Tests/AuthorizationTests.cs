@@ -79,6 +79,45 @@ public sealed class AuthorizationTests
     }
     
     
+    [Fact]
+    public async Task Admin_Can_Generate_Schedule()
+    {
+        using var factory = new CustomWebAppFactory();
+        await factory.InitializeDbAsync();
+
+        using var client = factory.CreateClient();
+        var token = await LoginAsync(client, "admin1@example.com");
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        client.DefaultRequestHeaders.Add("X-Client-Id", "1");
+
+        var response = await client.PostAsJsonAsync("/schedules/generate", new
+        {
+            PeriodStart = new DateTime(2026, 11, 16),
+            PeriodEnd = new DateTime(2026, 11, 17)
+        });
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task Viewer_Cannot_Change_Scheduling_Settings()
+    {
+        using var factory = new CustomWebAppFactory();
+        await factory.InitializeDbAsync();
+
+        using var client = factory.CreateClient();
+        var token = await LoginAsync(client, "viewer1@example.com");
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        client.DefaultRequestHeaders.Add("X-Client-Id", "1");
+
+        var response = await client.PutAsJsonAsync("/settings/scheduling", new
+        {
+            MaxShiftsPerEmployee = 2
+        });
+
+        Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
+    }
+
     private static async Task<string> LoginAsync(HttpClient client, string email)
     {
         var response = await client.PostAsJsonAsync("/auth/login", 

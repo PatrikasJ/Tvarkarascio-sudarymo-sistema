@@ -138,6 +138,33 @@ public class ScheduleGenTests
     }
     
     [Fact]
+    public void Generate_RespectsMaxShiftsPerEmployee()
+    {
+        var start = new DateTime(2026, 11, 16, 8, 0, 0);
+        var end = start.AddHours(8);
+        var employee = WithId(new Employee("1", "Benas", "padavejas", 40), 1);
+        employee.AddAvailability(start, end);
+        
+
+        var shifts = new List<Shift>
+        {
+            WithId(new Shift("1", start, start.AddHours(4), "padavejas"), 10),
+            WithId(new Shift("1", start.AddHours(4), end, "padavejas"), 11)
+        };
+
+        var generator = new ScheduleGenerator();
+        var limited = generator.Generate("1", start, end,
+            new List<Employee> { employee }, shifts, maxShiftsPerEmployee: 1);
+        var relaxed = generator.Generate("1", start, end,
+            new List<Employee> { employee }, shifts, maxShiftsPerEmployee: 2);
+
+        Assert.Single(limited.Schedule.Assignments);
+        Assert.Contains(11, limited.UnfilledShiftIds);
+        Assert.Equal(2, relaxed.Schedule.Assignments.Count);
+        Assert.Empty(relaxed.UnfilledShiftIds);
+    }
+
+    [Fact]
     public void Generate_DoesNotAssignEmployeeFromAnotherClient()
     {
         var start = new DateTime(2026, 11, 16, 8, 0, 0);

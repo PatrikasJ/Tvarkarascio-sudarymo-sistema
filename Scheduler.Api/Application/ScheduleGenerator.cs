@@ -27,7 +27,7 @@ public sealed class ScheduleGenerator
                     existingShift.Start < shift.End && existingShift.End > shift.Start))
                 .Where(employee =>
                     assignedHours[employee.Id] + (shift.End - shift.Start).TotalHours <= employee.MaxHours)
-                .Where(e => assignedShifts.Count(a => a.Key == e.Id) < maxShiftsPerEmployee);
+                .Where(e => assignedShifts[e.Id].Count < maxShiftsPerEmployee);
             
             var selectedEmployee = eligibleEmployees
                 .OrderBy(employee => assignedHours[employee.Id])

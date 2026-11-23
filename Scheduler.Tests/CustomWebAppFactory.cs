@@ -13,6 +13,13 @@ namespace Scheduler.Tests;
 
 public class CustomWebAppFactory : WebApplicationFactory<Program>
 {
+    public CustomWebAppFactory()
+    {
+        Environment.SetEnvironmentVariable("Jwt__Issuer", "Scheduler.Api");
+        Environment.SetEnvironmentVariable("Jwt__Audience", "Scheduler.Client");
+        Environment.SetEnvironmentVariable("Jwt__Key", "TEST-ONLY-JWT-SIGNING-KEY-AT-LEAST-32-BYTES-LONG");
+    }
+    
     private readonly string _databasePath = Path.Combine(Path.GetTempPath(), $"scheduler-test-{Guid.NewGuid():N}.db");
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)

@@ -1,5 +1,7 @@
 using System.Net;
 using System.Net.Http.Json;
+using System.Net.Http.Headers;
+using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Scheduler.Api.Infrastructure;
@@ -15,6 +17,7 @@ public class ScheduleApiIntegrationTests
         await factory.InitializeDbAsync();
         
         using var client = factory.CreateClient();
+        await AuthenticateAsync(client);
         client.DefaultRequestHeaders.Add("X-Client-Id", "1");
 
         var request = new
@@ -29,7 +32,9 @@ public class ScheduleApiIntegrationTests
     public async Task GenerateSchedule_WithoutClientId_ReturnsBadRequest()
     {
         using var factory = new CustomWebAppFactory();
+        await factory.InitializeDbAsync();
         using var client = factory.CreateClient();
+        await AuthenticateAsync(client);
 
         var request = new
         {
@@ -44,7 +49,9 @@ public class ScheduleApiIntegrationTests
     public async Task GenerateSchedule_WithInvalidDates_ReturnsBadRequest()
     {
         using var factory = new CustomWebAppFactory();
+        await factory.InitializeDbAsync();
         using var client = factory.CreateClient();
+        await AuthenticateAsync(client);
 
         client.DefaultRequestHeaders.Add("X-Client-Id", "1");
         var request = new
@@ -64,6 +71,7 @@ public class ScheduleApiIntegrationTests
         await factory.InitializeDbAsync();
 
         using var client = factory.CreateClient();
+        await AuthenticateAsync(client);
         client.DefaultRequestHeaders.Add("X-Client-Id", "1");
 
         var request = new
@@ -126,5 +134,18 @@ public class ScheduleApiIntegrationTests
             .Intersect(client2Employees.Select(e => e.Id)));
         Assert.Empty(client1Shifts.Select(s => s.Id)
                 .Intersect(client2Shifts.Select(s => s.Id)));
+    }
+
+    private static async Task AuthenticateAsync(HttpClient client)
+    {
+        var response = await client.PostAsJsonAsync("/auth/login", new
+        {
+            Email = "admin1@example.com",
+            Password = "password123"
+        });
+        response.EnsureSuccessStatusCode();
+        using var document = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
+        var token = document.RootElement.GetProperty("accessToken").GetString();
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
     }
 }

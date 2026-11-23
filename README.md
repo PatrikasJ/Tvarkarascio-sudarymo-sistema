@@ -29,7 +29,7 @@ creates persistent SQLite storage, and starts the application.
 API is available at http://localhost:8080
 
 ## Available commands
-* Check if API is respondingq
+* Check if API is responding
 ```powershell
 curl.exe http://localhost:8080/health
 ```
@@ -45,6 +45,8 @@ docker compose down -v
 ```bash
 dotnet test
 ```
+The project contains 18 automated tests covering scheduling rules, authentication, authorization, 
+organization isolation, and scheduling settings. All 18 tests passed during the final verification.
 
 ## API Endpoints
 
@@ -144,3 +146,8 @@ dotnet run --project Scheduler.Api
 ```
 Running the API gives web address (ex. 'http://localhost:5000'). 
 Database file 'scheduler.db' will be created and filled with sample data automatically.
+
+# Documentation
+
+- [Initial architecture document](docs/Projektavimo%20dokumentas.pdf)
+- [Final architecture document](docs/Architekturos%20dokumentas.pdf)
