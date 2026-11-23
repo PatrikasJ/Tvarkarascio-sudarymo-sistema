@@ -1,5 +1,10 @@
 # Employee Scheduling API
 
+This is a backend REST API for an employee scheduling system, developed using C# and ASP.NET Core. 
+The project implements only the backend functionality; GUI is not included. 
+Furthermore, the system does not provide CRUD endpoints for managing employees,
+shifts or availability, instead using sample data to show its functionality.
+
 The application runs in a Docker container. It supports multiple clients. 
 Demo database contains 2 sample organizations, identified by ClientId.
 
